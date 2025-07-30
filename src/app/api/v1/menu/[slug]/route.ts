@@ -22,7 +22,8 @@ export async function GET(
 							basePrice: 100000,
 							isActive: true,
 							name: "پیتزا مارگاریتا",
-							description: "توضیحات",
+							description:
+								"توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات",
 							sortPriority: 1,
 						},
 					],
@@ -30,6 +31,25 @@ export async function GET(
 					description:
 						"پیتزا های ایتالیایی که با مواد مرغوب و ارگانیک درست می شوند",
 					sortPriority: 1,
+				},
+				{
+					id: 2,
+					isActive: true,
+					items: [
+						{
+							id: 2,
+							basePrice: 100000,
+							isActive: true,
+							name: "پیتزا پپرونی",
+							description:
+								"توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات توضیحات",
+							sortPriority: 1,
+						},
+					],
+					name: "پیتزا آمریکایی",
+					description:
+						"پیتزا های آمریکایی که با مواد مرغوب و ارگانیک درست می شوند",
+					sortPriority: 2,
 				},
 			],
 		};

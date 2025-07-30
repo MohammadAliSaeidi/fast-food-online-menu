@@ -26,7 +26,6 @@ export default async function Page({ params }: Params) {
 	}
 
 	return (
-		// <div></div>
 		<HydrationBoundary state={dehydrate(queryClient)}>
 			<Menu slug={slug} />
 		</HydrationBoundary>
