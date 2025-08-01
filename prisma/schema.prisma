@@ -1,0 +1,240 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model RootAdmin {
+  id           Int            @id @default(autoincrement())
+  username     String         @unique
+  password     String
+  name         String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime?      @updatedAt
+  role         AdminRole      @default(SUPPORT)
+  userId       Int            @unique
+  isActive     Boolean        @default(true)
+  RefreshToken RefreshToken[]
+  user         User           @relation(fields: [userId], references: [id])
+}
+
+model Admin {
+  id           Int            @id @default(autoincrement())
+  username     String         @unique
+  password     String
+  name         String?
+  role         AdminRole      @default(SUPPORT)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime?      @updatedAt
+  menuId       Int
+  isActive     Boolean        @default(true)
+  menu         Menu           @relation(fields: [menuId], references: [id])
+  RefreshToken RefreshToken[]
+}
+
+model User {
+  id           Int            @id @default(autoincrement())
+  phone        String         @unique
+  password     String
+  name         String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime?      @updatedAt
+  isActive     Boolean        @default(true)
+  cafes        Menu[]
+  orders       Order[]
+  OtpCode      OtpCode[]
+  RefreshToken RefreshToken[]
+  RootAdmin    RootAdmin?
+}
+
+model RefreshToken {
+  id          Int        @id @default(autoincrement())
+  token       String     @unique
+  userId      Int?
+  rootAdminId Int?
+  adminId     Int?
+  expiresAt   DateTime
+  createdAt   DateTime   @default(now())
+  admin       Admin?     @relation(fields: [adminId], references: [id])
+  rootAdmin   RootAdmin? @relation(fields: [rootAdminId], references: [id])
+  user        User?      @relation(fields: [userId], references: [id])
+}
+
+model Menu {
+  id                          Int        @id @default(autoincrement())
+  ownerId                     Int
+  name                        String
+  slug                        String     @unique
+  logoUrl                     String?
+  headerPhotoUrl              String?
+  headerPhotoThumbnailDataUrl String?
+  description                 String?
+  slogan                      String?
+  address                     String?
+  phone                       String?
+  rating                      Float?     @default(0)
+  createdAt                   DateTime   @default(now())
+  updatedAt                   DateTime?  @updatedAt
+  isActive                    Boolean    @default(true)
+  Admin                       Admin[]
+  owner                       User       @relation(fields: [ownerId], references: [id])
+  categories                  Category[]
+  orders                      Order[]
+}
+
+model Category {
+  id           Int        @id @default(autoincrement())
+  menuId       Int
+  name         String
+  description  String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime?  @updatedAt
+  isActive     Boolean    @default(true)
+  sortPriority Int        @default(0)
+  menu         Menu       @relation(fields: [menuId], references: [id])
+  menuItems    MenuItem[]
+}
+
+model MenuItem {
+  id                    Int          @id @default(autoincrement())
+  categoryId            Int
+  name                  String
+  description           String?
+  basePrice             Float
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime?    @updatedAt
+  imageUrl              String?
+  imageThumbnailDataUrl String?
+  isActive              Boolean      @default(true)
+  sortPriority          Int?         @default(0)
+  itemOptions           ItemOption[]
+  category              Category     @relation(fields: [categoryId], references: [id])
+  orderItems            OrderItem[]
+}
+
+model Option {
+  id               Int               @id @default(autoincrement())
+  name             String
+  type             OptionType
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime?         @updatedAt
+  isActive         Boolean           @default(true)
+  itemOptions      ItemOption[]
+  optionValues     OptionValue[]
+  orderItemOptions OrderItemOption[]
+}
+
+model OptionValue {
+  id               Int               @id @default(autoincrement())
+  optionId         Int
+  value            String
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime?         @updatedAt
+  isActive         Boolean           @default(true)
+  ItemOptionValue  ItemOptionValue[]
+  option           Option            @relation(fields: [optionId], references: [id])
+  orderItemOptions OrderItemOption[]
+}
+
+model ItemOption {
+  id              Int               @id @default(autoincrement())
+  itemId          Int
+  optionId        Int
+  isRequired      Boolean           @default(false)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime?         @updatedAt
+  isActive        Boolean           @default(true)
+  item            MenuItem          @relation(fields: [itemId], references: [id])
+  option          Option            @relation(fields: [optionId], references: [id])
+  ItemOptionValue ItemOptionValue[]
+}
+
+model ItemOptionValue {
+  id              Int               @id @default(autoincrement())
+  itemOptionId    Int
+  optionValueId   Int
+  extraPrice      Float             @default(0)
+  itemOption      ItemOption        @relation(fields: [itemOptionId], references: [id])
+  optionValue     OptionValue       @relation(fields: [optionValueId], references: [id])
+  OrderItemOption OrderItemOption[]
+}
+
+model Order {
+  id              Int         @id @default(autoincrement())
+  menuId          Int
+  userId          Int
+  type            OrderType   @default(DINE_IN)
+  status          OrderStatus
+  totalPrice      Float
+  notes           String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime?   @updatedAt
+  rating          Float?
+  ratingComment   String?
+  ratingCreatedAt DateTime?
+  ratingUpdatedAt DateTime?
+  menu            Menu        @relation(fields: [menuId], references: [id])
+  user            User        @relation(fields: [userId], references: [id])
+  orderItems      OrderItem[]
+}
+
+model OrderItem {
+  id               Int               @id @default(autoincrement())
+  orderId          Int
+  itemId           Int
+  quantity         Int
+  itemPrice        Float
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime?         @updatedAt
+  item             MenuItem          @relation(fields: [itemId], references: [id])
+  order            Order             @relation(fields: [orderId], references: [id])
+  orderItemOptions OrderItemOption[]
+}
+
+model OrderItemOption {
+  id                Int             @id @default(autoincrement())
+  orderItemId       Int
+  optionId          Int
+  extraPrice        Float           @default(0)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime?       @updatedAt
+  itemOptionValueId Int
+  optionValueId     Int?
+  value             ItemOptionValue @relation(fields: [itemOptionValueId], references: [id])
+  option            Option          @relation(fields: [optionId], references: [id])
+  OptionValue       OptionValue?    @relation(fields: [optionValueId], references: [id])
+  orderItem         OrderItem       @relation(fields: [orderItemId], references: [id])
+}
+
+model OtpCode {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @map("user_id")
+  code      String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+enum OptionType {
+  SINGLE
+  MULTIPLE
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  CANCELED
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  SUPPORT
+}
+
+enum OrderType {
+  DINE_IN
+}
