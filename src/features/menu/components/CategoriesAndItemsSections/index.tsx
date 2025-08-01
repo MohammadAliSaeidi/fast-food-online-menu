@@ -1,8 +1,8 @@
-import { MenuCategoryDTO } from "../../types/MenuCategoryDTO";
+import { ClientCategoryDTO } from "../../types/DTO/client/ClientCategoryDTO";
 import CategoryAndItemsSection from "../CategoryAndItemsSection";
 
 type Props = {
-	data: MenuCategoryDTO[];
+	data: ClientCategoryDTO[];
 };
 
 export default function CategoriesAndItemsSections({ data }: Props) {

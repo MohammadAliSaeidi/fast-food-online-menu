@@ -1,8 +1,8 @@
-import { MenuCategoryDTO } from "../../types/MenuCategoryDTO";
+import { ClientCategoryDTO } from "../../types/DTO/client/ClientCategoryDTO";
 import MenuItem from "../MenuItem";
 
 type Props = {
-	data: MenuCategoryDTO;
+	data: ClientCategoryDTO;
 };
 export default function CategoryAndItemsSection(props: Props) {
 	const { data } = props;
@@ -16,9 +16,9 @@ export default function CategoryAndItemsSection(props: Props) {
 			<h2 id={categoryHeadingId}>{data.name}</h2>
 			<p>{}</p>
 			<ul role="list" className="overflow-x-auto">
-				{data.items.map((item) => (
+				{data.menuItems.map((item) => (
 					<li role="listitem" key={item.id}>
-						<MenuItem data={item} />
+						<MenuItem onCountChange={() => {}} data={item} />
 					</li>
 				))}
 			</ul>

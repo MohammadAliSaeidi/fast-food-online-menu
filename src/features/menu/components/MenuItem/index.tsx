@@ -1,9 +1,9 @@
 import Counter from "@/features/shared/components/Counter";
 import Image from "next/image";
-import { MenuItemDTO } from "../../types/MenuItemDTO";
+import { ClientMenuItemDTO } from "../../types/DTO/client/ClientMenuItemDTO";
 
 type Props = {
-	data: MenuItemDTO;
+	data: ClientMenuItemDTO;
 	onCountChange: (count: number) => void;
 	isCounterLoading?: boolean;
 };

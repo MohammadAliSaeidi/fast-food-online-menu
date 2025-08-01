@@ -1,12 +1,9 @@
-import { MenuCategory } from "@/features/shared/types/MenuCategory";
-
-export type MenuCategoryComponentType = Omit<
-	MenuCategory,
-	"updatedAt" | "items" | "createdAt" | "description" | "sortPriority"
->;
+import { ClientCategoryDTO } from "../../types/DTO/client/ClientCategoryDTO";
 
 export type Props = {
-	data: MenuCategoryComponentType;
+	data: Pick<ClientCategoryDTO, "id" | "isActive" | "name">;
 	isSelected?: boolean;
-	onClick?: (category: MenuCategoryComponentType) => void;
+	onClick?: (
+		category: Pick<ClientCategoryDTO, "id" | "isActive" | "name">
+	) => void;
 };

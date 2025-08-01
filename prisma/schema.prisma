@@ -135,7 +135,7 @@ model OptionValue {
   createdAt        DateTime          @default(now())
   updatedAt        DateTime?         @updatedAt
   isActive         Boolean           @default(true)
-  ItemOptionValue  ItemOptionValue[]
+  itemOptionValue  ItemOptionValue[]
   option           Option            @relation(fields: [optionId], references: [id])
   orderItemOptions OrderItemOption[]
 }
@@ -150,13 +150,14 @@ model ItemOption {
   isActive        Boolean           @default(true)
   item            MenuItem          @relation(fields: [itemId], references: [id])
   option          Option            @relation(fields: [optionId], references: [id])
-  ItemOptionValue ItemOptionValue[]
+  itemOptionValue ItemOptionValue[]
 }
 
 model ItemOptionValue {
   id              Int               @id @default(autoincrement())
   itemOptionId    Int
   optionValueId   Int
+  isActive        Boolean           @default(true)
   extraPrice      Float             @default(0)
   itemOption      ItemOption        @relation(fields: [itemOptionId], references: [id])
   optionValue     OptionValue       @relation(fields: [optionValueId], references: [id])
