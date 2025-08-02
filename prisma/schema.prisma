@@ -226,6 +226,7 @@ enum OptionType {
 }
 
 enum OrderStatus {
+  DRAFT
   PENDING
   COMPLETED
   CANCELED

@@ -317,6 +317,7 @@ exports.OrderType = exports.$Enums.OrderType = {
 };
 
 exports.OrderStatus = exports.$Enums.OrderStatus = {
+  DRAFT: 'DRAFT',
   PENDING: 'PENDING',
   COMPLETED: 'COMPLETED',
   CANCELED: 'CANCELED'

@@ -102,6 +102,7 @@ export type OptionType = (typeof OptionType)[keyof typeof OptionType]
 
 
 export const OrderStatus: {
+  DRAFT: 'DRAFT',
   PENDING: 'PENDING',
   COMPLETED: 'COMPLETED',
   CANCELED: 'CANCELED'
